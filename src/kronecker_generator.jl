@@ -4,7 +4,7 @@ struct kroneckerState
 end
 
 """
-    Generates a kronecker Graph. `SCALE` is the logarithm base two of the number of vertices.
+    Returns a kroneckerState. `SCALE` is the logarithm base two of the number of vertices.
     `edgefactor` is the ratio of the graph’s edge count to its vertex count (i.e., half the
     average degree of a vertex in the graph).
 
