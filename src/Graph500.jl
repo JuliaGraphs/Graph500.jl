@@ -3,7 +3,7 @@ module Graph500
 
   # Dependencies
   using LightGraphs
-  using SimpleWeightedGraphs
+  # using SimpleWeightedGraphs
 
   export
   # kronecker_generator
