@@ -1,2 +1,3 @@
 julia 0.6
 LightGraphs v0.9.1
+SimpleWeightedGraphs v0.0.1
