@@ -16,7 +16,8 @@ References
 function kronecker_generator(
   SCALE::Integer,
   edgefactor::Integer;
-  seed::Real=5, 
+  replicate::Bool=false,
+  seed::AbstractArray=nothing,
   A::AbstractFloat=0.57,
   B::AbstractFloat=0.19,
   C::AbstractFloat=0.19
@@ -24,14 +25,19 @@ function kronecker_generator(
     N  = 2^SCALE            # Set number of vertices
     M  = edgefactor * N     # Set number of edges
     ij = ones(Int, 2, M)      # Create index arrays
-    ijw = rand(Float64, M)        # Generate weights
 
     # Loop over each order of bit
     ab = A + B
     c_norm = C/(1 - (A + B))
     a_norm = A/(A + B)
 
-    srand(seed)
+    #Seeding the processors if replicate is true
+    if replicate
+      srand(seed[1])
+      for i in 2:nprocs()
+         @spawnat i srand(seed[i])
+      end
+    end
 
     temp =  @parallel (+) for ib in 1:SCALE
         # Compare with probabilities and set bits of indices.
@@ -43,6 +49,12 @@ function kronecker_generator(
 
     ij += temp
 
+    # Generate weights
+    if replicate
+      srand(seed[nprocs() + 1])
+    end
+    ijw = rand(Float64, M)
+
     # Permute vertex labels
     p = randperm(N)
     ij[1:2, :] = p[ij[1:2, :]]
@@ -52,5 +64,5 @@ function kronecker_generator(
     ij = ij[:, p]
     ijw = ijw[p]
 
-    return kroneckerState{Int, Float64}(ij, ijw)
+    return kroneckerState{Int64, Float64}(ij, ijw)
 end
