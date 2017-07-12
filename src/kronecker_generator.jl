@@ -17,7 +17,7 @@ function kronecker_generator(
   SCALE::Integer,
   edgefactor::Integer;
   replicate::Bool=false,
-  seed::AbstractArray=nothing,
+  seed::AbstractArray=[],
   A::AbstractFloat=0.57,
   B::AbstractFloat=0.19,
   C::AbstractFloat=0.19
