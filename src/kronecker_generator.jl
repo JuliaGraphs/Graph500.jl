@@ -16,6 +16,7 @@ References
 function kronecker_generator(
   SCALE::Integer,
   edgefactor::Integer;
+  seed::Real=5, 
   A::AbstractFloat=0.57,
   B::AbstractFloat=0.19,
   C::AbstractFloat=0.19
@@ -29,6 +30,8 @@ function kronecker_generator(
     ab = A + B
     c_norm = C/(1 - (A + B))
     a_norm = A/(A + B)
+
+    srand(seed)
 
     temp =  @parallel (+) for ib in 1:SCALE
         # Compare with probabilities and set bits of indices.
