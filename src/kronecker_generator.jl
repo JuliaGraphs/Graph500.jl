@@ -1,6 +1,6 @@
-struct kroneckerState
-    edge::Array{Int,2}
-    weight::Array{Float64}
+struct kroneckerState{T<:Integer, R<:Real}
+    edge::Array{T,2}
+    weight::Array{R}
 end
 
 """
@@ -13,16 +13,25 @@ References
 - http://graph500.org/?page_id=12#alg:generator
 """
 
-function kronecker_generator(SCALE, edgefactor, A=0.57, B=0.19, C=0.19)
+function kronecker_generator(
+  SCALE::Integer,
+  edgefactor::Integer;
+  seed::Real=5, 
+  A::AbstractFloat=0.57,
+  B::AbstractFloat=0.19,
+  C::AbstractFloat=0.19
+  )
     N  = 2^SCALE            # Set number of vertices
     M  = edgefactor * N     # Set number of edges
-    ij = ones(Int, 2, M)    # Create index arrays
-    ijw = rand(Float64, M)  # Generate weights
+    ij = ones(Int, 2, M)      # Create index arrays
+    ijw = rand(Float64, M)        # Generate weights
 
     # Loop over each order of bit
     ab = A + B
     c_norm = C/(1 - (A + B))
     a_norm = A/(A + B)
+
+    srand(seed)
 
     temp =  @parallel (+) for ib in 1:SCALE
         # Compare with probabilities and set bits of indices.
@@ -43,5 +52,5 @@ function kronecker_generator(SCALE, edgefactor, A=0.57, B=0.19, C=0.19)
     ij = ij[:, p]
     ijw = ijw[p]
 
-    return kroneckerState(ij, ijw)
+    return kroneckerState{Int, Float64}(ij, ijw)
 end
