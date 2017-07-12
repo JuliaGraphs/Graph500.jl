@@ -4,7 +4,6 @@ function kernel_1(
 
   ij = edge_list.edge
   ijw = edge_list.weight
-  nv = maximum(ij)
   cols = size(ij)[2]
 
   # removing self Loop
