@@ -20,7 +20,7 @@ function kernel_1(
 
   # Construct a sparse matrix and a SimpleWeightedGraph
   sp = sparse(srcs, dest, weight)
-  g = SimpleWeightedGraph(sp)
+  g = SimpleWeightedGraph{T,R}(sp)
 
   return g
 end
