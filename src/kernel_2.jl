@@ -17,8 +17,11 @@ function key_sampling(
 end
 
 function kernel_2(
-  g::SimpleWeightedGraph{T,R}
+  g::SimpleWeightedGraph{T,R},
+  key::T
   ) where T<:Integer where R<:Real
 
-  
+  weight = trunc.(Int8, spones(g.weights))
+  parent = dijkstra_shortest_paths(g, key, weight).parents
+  parent[key] = key
 end
