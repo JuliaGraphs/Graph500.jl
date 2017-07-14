@@ -33,8 +33,7 @@ function kronecker_generator(
 
     #Seeding the processors if replicate is true
     if replicate
-      srand(seed[1])
-      for i in 2:nprocs()
+      for i in 1:nprocs()
          @spawnat i srand(seed[i])
       end
     end
