@@ -21,7 +21,7 @@ function kernel_2(
   key::T
   ) where T<:Integer where R<:Real
 
-  weight = trunc.(Int8, spones(g.weights))
-  parent = dijkstra_shortest_paths(g, key, weight).parents
+  parent = dijkstra_shortest_paths(g, key, LightGraphs.DefaultDistance(nv(g))).parents
   parent[key] = key
+  parent = parent - 1
 end
