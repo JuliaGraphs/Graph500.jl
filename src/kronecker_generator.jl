@@ -1,4 +1,4 @@
-.struct kroneckerState{T<:Integer, R<:Real}
+struct kroneckerState{T<:Integer, R<:Real}
     edge::Array{T,2}
     weight::Array{R}
 end
