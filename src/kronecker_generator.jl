@@ -1,6 +1,5 @@
-struct kroneckerState{T<:Integer, R<:Real}
+struct kroneckerState{T<:Integer}
     edge::Array{T,2}
-    weight::Array{R}
 end
 
 """
@@ -56,5 +55,5 @@ function kronecker_generator(
     p = randperm(M)
     ij = ij[:, p]
 
-    return kroneckerState{Int64, Float64}(ij, ijw)
+    return kroneckerState{Int64}(ij)
 end
