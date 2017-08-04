@@ -48,12 +48,6 @@ function kronecker_generator(
 
     ij += temp
 
-    # Generate weights
-    if replicate
-      srand(seed[nprocs() + 1])
-    end
-    ijw = rand(Float64, M)
-
     # Permute vertex labels
     p = randperm(N)
     ij[1:2, :] = p[ij[1:2, :]]
@@ -61,7 +55,6 @@ function kronecker_generator(
     # Permute the edge list
     p = randperm(M)
     ij = ij[:, p]
-    ijw = ijw[p]
 
     return kroneckerState{Int64, Float64}(ij, ijw)
 end
