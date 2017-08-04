@@ -13,10 +13,7 @@ module Graph500
   kernel_1,
 
   # kernel_2
-  key_sampling, kernel_2,
-
-  #kernel_3
-  kernel_3
+  key_sampling, kernel_2
 
   Graph500
   include("kronecker_generator.jl")

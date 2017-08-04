@@ -1,9 +1,12 @@
-struct kroneckerState{T<:Integer}
-    edge::Array{T,2}
+function get_min_type(n::Integer)
+  validtypes = [UInt8, UInt16, UInt32, UInt64]
+  for T in validtypes
+      n < typemax(T) && return T
+  end
 end
 
 """
-    Returns a kroneckerState. `SCALE` is the logarithm base two of the number of vertices.
+    Returns a edge_list. `SCALE` is the logarithm base two of the number of vertices.
     `edgefactor` is the ratio of the graph’s edge count to its vertex count (i.e., half the
     average degree of a vertex in the graph).
 
@@ -23,26 +26,31 @@ function kronecker_generator(
   )
     N  = 2^SCALE            # Set number of vertices
     M  = edgefactor * N     # Set number of edges
-    ij = ones(Int, 2, M)      # Create index arrays
 
-    # Loop over each order of bit
+    # loop over each order of bit
     ab = A + B
     c_norm = C/(1 - (A + B))
     a_norm = A/(A + B)
 
-    #Seeding the processors if replicate is true
+    # getting correct Inttype
+    T = get_min_type(N)
+    ij = ones(T, 2, M)    # Create index arrays
+    T_one = T(1)
+    T_two = T(2)
+
+    #seeding the processors if replicate is true
     if replicate
       for i in 1:nprocs()
          @spawnat i srand(seed[i])
       end
     end
 
-    temp =  @parallel (+) for ib in 1:SCALE
+    temp =  @parallel (+) for ib in 1:T(SCALE)
         # Compare with probabilities and set bits of indices.
         random_bits = falses(2, M)
         random_bits[1, :] = rand(M) .> (ab)
         random_bits[2, :] = rand(M) .> ( c_norm.*(random_bits[1, :]) + a_norm.*.!(random_bits[1, :]) )
-        2^(ib-1).*random_bits
+        T_two^(ib-T_one).*random_bits
     end
 
     ij += temp
@@ -55,5 +63,5 @@ function kronecker_generator(
     p = randperm(M)
     ij = ij[:, p]
 
-    return kroneckerState{Int64}(ij)
+    return ij
 end
