@@ -30,7 +30,7 @@ function driver(
     kernel_2_time =  SharedArray(zeros(Float64,NBFS))
     kernel_2_nedge = SharedArray(zeros(Int64,NBFS))
 
-    @sync @parallel for k in 1:NBFS
+    for k in 1:NBFS
         tic()
         parent_ = kernel_2(g, search_key[k])
         kernel_2_time[k] = toc()
@@ -45,7 +45,6 @@ function driver(
                 kernel_2_nedge[k]+=indegree(g,parent_[i])
             end
         end
-
     end
 
     return Graph500Results{T}(g, NBFS, kernel_1_time, kernel_2_time, kernel_2_nedge)
