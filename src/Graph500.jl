@@ -16,12 +16,16 @@ module Graph500
   key_sampling, kernel_2,
 
   # bfs validation
-  validate
+  validate,
+
+  # driver function
+  driver
 
   Graph500
   include("kronecker_generator.jl")
   include("kernel_1.jl")
   include("kernel_2.jl")
   include("validation.jl")
+  include("driver.jl")
 
 end # module
