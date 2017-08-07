@@ -23,5 +23,5 @@ function kernel_2(
 
   parent = dijkstra_shortest_paths(g, key).parents
   parent[key] = key
-  parent = parent - 1
+  return parent
 end

@@ -8,10 +8,6 @@ function validate(
     # Default: no error.
     out = 1
 
-    # Adjust from zero labels.
-    parent_ = parent_ + 1
-    search_key = search_key + 1
-
     # root must be the parent of itself
     if parent_[search_key] != search_key
       out = 0
@@ -19,7 +15,7 @@ function validate(
     end
 
     N = nv(g)
-    slice = find(x->(x > 0), parent_)
+    slice = find(x->(x > zero(T)), parent_)
 
     #Compute levels and check for cycles.
     level_ = zeros(T, length(parent_))
@@ -61,11 +57,17 @@ function validate(
     #Validate the distances/levels.
     respects_tree_level = trues(1, size(ij)[2])
     not_neither_in_or_respects_tree_level = zeros(Bool,size(ij)[2])
-    for i in 1:size(ij)[2]
+    level_difference = one(T);
+    @simd for i in 1:size(ij)[2]
+        # To prevent Unsigned integer overflows
+        if(lij[1,i] > lij[2,i])
+            respects_tree_level[i] = (lij[1,i] .- lij[2,i]) <= level_difference
+        else
+            respects_tree_level[i] = (lij[2,i] .- lij[1,i]) <= level_difference
+        end
+
         not_neither_in_or_respects_tree_level[i] = !(neither_in[i] || respects_tree_level[i])
     end
-    respects_tree_level = abs.(lij[1,:] .- lij[2,:]) .<= 1
-
     if any(not_neither_in_or_respects_tree_level)
       out = -5
       return out
