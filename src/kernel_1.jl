@@ -1,16 +1,16 @@
 function kernel_1(
-  edge_list::Array{T,2}
+  ij::Array{T,2}
   ) where T<:Integer
 
   # Creating Graph
-  ne = maximum(edge_list)
+  ne = maximum(ij)
   g = Graph{T}(ne)
   g.ne = ne
 
   # removing self Loop and adding edges
-  for i in 1:size(edge_list)[2]
-    if(edge_list[1,i] != edge_list[2,i])
-      add_edge!(g,edge_list[1,i],edge_list[2,i]);
+  for i in 1:size(ij)[2]
+    if(ij[1,i] != ij[2,i])
+      add_edge!(g, ij[1,i], ij[2,i]);
     end
   end
 

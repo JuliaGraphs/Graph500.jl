@@ -1,6 +1,6 @@
 function key_sampling(
-  g::SimpleWeightedGraph{T,R}
-  ) where T<:Integer where R<:Real
+  g::Graph{T}
+  ) where T<:Integer
 
   n_v = nv(g)
   rand_keys = sample(1:n_v, 64, replace = false)
@@ -17,11 +17,11 @@ function key_sampling(
 end
 
 function kernel_2(
-  g::SimpleWeightedGraph{T,R},
+  g::Graph{T},
   key::T
-  ) where T<:Integer where R<:Real
+  ) where T<:Integer
 
-  parent = dijkstra_shortest_paths(g, key, LightGraphs.DefaultDistance(nv(g))).parents
+  parent = dijkstra_shortest_paths(g, key).parents
   parent[key] = key
   parent = parent - 1
 end

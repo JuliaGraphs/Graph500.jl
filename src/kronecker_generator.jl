@@ -1,3 +1,7 @@
+"""
+    Return the minimum Integer type which can contain `n`
+"""
+
 function get_min_type(n::Integer)
   validtypes = [UInt8, UInt16, UInt32, UInt64]
   for T in validtypes

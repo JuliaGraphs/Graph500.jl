@@ -18,6 +18,6 @@ module Graph500
   Graph500
   include("kronecker_generator.jl")
   include("kernel_1.jl")
-  # include("kernel_2.jl")
+  include("kernel_2.jl")
 
 end # module
