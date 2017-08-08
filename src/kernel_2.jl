@@ -20,12 +20,21 @@ function key_sampling(
   return keys
 end
 
-function kernel_2(
-  g::Graph{T},
-  key::T
-  ) where T<:Integer
-
-  parent = dijkstra_shortest_paths(g, key).parents
-  parent[key] = key
-  return parent
+function kernel_2(g::Graph{T}, s::T, parents::Vector{T}) where T<:Integer
+    Q=Vector{T}()
+    seen = falses(nv(g))
+    parents[s] = s
+    seen[s] = true
+    push!(Q, s)
+    while !isempty(Q)
+        src = shift!(Q)
+        for vertex in out_neighbors(g, src)
+            if !seen[vertex]
+                push!(Q, vertex) #Push onto queue
+                parents[vertex] = src
+                seen[vertex] = true
+            end
+        end
+    end
+    return parents
 end
