@@ -1,5 +1,5 @@
 function output(result::Graph500Results)
-
+      println("\n")
       println("Scale : ", result.SCALE)
       println("Number of vertices : ", ne(result.g))
       println("Number of Edges : ", nv(result.g))
@@ -35,13 +35,7 @@ function output(result::Graph500Results)
       K2N = length(K2TEPS)
       S = summarystats(K2TEPS)
 
-      # bfs harmonic standard deviation
-      #   S(6) = mean(K2TEPS, 'h')
-      #
-      #   k2tmp = zeros(K2N, 1)
-      #   k2tmp(K2TEPS > 0) = 1./K2TEPS(K2TEPS > 0)
-      #   k2tmp = k2tmp - 1/S(6)
-      #   S(7) = (sqrt (sum (k2tmp.^2)) / (K2N-1)) * S(6)^2
+
 
       # TEPS : Traversed edges per second
       println("BFS min TEPS : ", S.min)
