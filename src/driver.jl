@@ -1,11 +1,11 @@
 struct Graph500Results{T<:Integer}
     g::Graph{T}
+    SCALE::Integer
     NBFS::Integer
     kernel_1_time::Float64
     kernel_2_time::SharedArray{Float64,1}
     kernel_2_nedge::SharedArray{Int64,1}
 end
-
 
 function driver(
   SCALE::Integer,
@@ -19,7 +19,7 @@ function driver(
     # timing kernel 1
     tic()
     g = kernel_1(ij)
-    kernel_1_time = toc()
+    kernel_1_time = toq()
 
     # For computing the graph element type
     T = eltype(g)
@@ -34,7 +34,7 @@ function driver(
         tic()
         parent_ = zeros(T,nv(g))
         kernel_2(g, search_key[k], parent_)
-        kernel_2_time[k] = toc()
+        kernel_2_time[k] = toq()
         err = validate(g, parent_, ij, search_key[k])
         if err <= 0
           error("BFS ",k ," from search key ",search_key[k]," failed to validate: ",err)
@@ -48,5 +48,5 @@ function driver(
         end
     end
 
-    return Graph500Results{T}(g, NBFS, kernel_1_time, kernel_2_time, kernel_2_nedge)
+    return Graph500Results{T}(g, SCALE, NBFS, kernel_1_time, kernel_2_time, kernel_2_nedge)
 end

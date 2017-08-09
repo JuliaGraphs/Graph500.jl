@@ -19,7 +19,10 @@ module Graph500
   validate,
 
   # driver function
-  driver
+  driver,
+
+  # statistics output
+  output
 
   Graph500
   include("kronecker_generator.jl")
@@ -27,5 +30,6 @@ module Graph500
   include("kernel_2.jl")
   include("validation.jl")
   include("driver.jl")
+  include("output.jl")
 
 end # module
