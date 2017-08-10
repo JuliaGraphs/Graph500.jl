@@ -36,9 +36,7 @@ function driver(
         kernel_2(g, search_key[k], parent_)
         kernel_2_time[k] = toq()
         err = validate(g, parent_, ij, search_key[k])
-        if err <= 0
-          error("BFS ",k ," from search key ",search_key[k]," failed to validate: ",err)
-        end
+        err <= 0 && error("BFS ",k ," from search key ",search_key[k]," failed to validate: ",err)
 
         # Volume/2
         for i in 1:length(parent_)
