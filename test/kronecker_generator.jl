@@ -1,10 +1,7 @@
 @testset "kronecker_generator" begin
-  kg = @inferred kronecker_generator(2,2)
-  @test size(kg.edge) == (2,8)
-  @test length(kg.weight) == (8)
-
-  kg1 = @inferred kronecker_generator(2,2;replicate=true,seed=[10,4,78,12,5,72])
-  kg2 = @inferred kronecker_generator(2,2;replicate=true,seed=[10,4,78,12,5,72])
-  @test kg1.edge == kg2.edge
-  @test kg1.weight == kg2.weight
+  ij =  kronecker_generator(2,2)
+  @test size(ij) == (2,8)
+  ij1 = kronecker_generator(2,2;replicate=true,seed=[10,4,78,12,5,72])
+  ij2 = kronecker_generator(2,2;replicate=true,seed=[10,4,78,12,5,72])
+  @test ij1 == ij2
 end

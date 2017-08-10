@@ -63,9 +63,5 @@ function kronecker_generator(
     p = randperm(N)
     ij[1:2, :] = p[ij[1:2, :]]
 
-    # Permute the edge list
-    p = randperm(M)
-    ij = ij[:, p]
-
     return ij
 end
