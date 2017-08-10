@@ -5,4 +5,5 @@ using Base.Test
   include("kronecker_generator.jl")
   include("kernel_1.jl")
   include("kernel_2.jl")
+  include("validation.jl")
 end
