@@ -55,4 +55,5 @@ function output(result::Graph500Results)
       println("BFS harmonic mean TEPS : ", harmmean(K2TEPS))
       println("BFS harmonic standard deviation TEPS : ", harmonic_std)
 
+      return 1
   end

@@ -51,4 +51,5 @@ function driver(
     # printing information
     g = Graph500Results{T}(g, SCALE, NBFS, kernel_1_time, kernel_2_time, kernel_2_nedge)
     output(g)
+    return g
 end

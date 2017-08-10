@@ -6,4 +6,6 @@ using Base.Test
   include("kernel_1.jl")
   include("kernel_2.jl")
   include("validation.jl")
+  include("output.jl")
+  include("driver.jl")
 end

@@ -1,5 +1,9 @@
 @testset "kernel_2" begin
   using LightGraphs
+  kg = kronecker_generator(10,2)
+  g = kernel_1(kg)
+  keys_ = @inferred key_sampling(g)
+  @test length(keys_) <= 64
   kg = kronecker_generator(2,2)
   g = kernel_1(kg)
   keys_ = @inferred key_sampling(g)
