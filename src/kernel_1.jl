@@ -3,9 +3,8 @@ function kernel_1(
   ) where T<:Integer
 
   # Creating Graph
-  ne = maximum(ij)
-  g = Graph{T}(ne)
-  g.ne = ne
+  nv = maximum(ij) # Number of vertices
+  g = Graph{T}(nv) # Creating a graph with `nv` number of vertices
 
   # removing self Loop and adding edges
   for i in 1:size(ij)[2]
