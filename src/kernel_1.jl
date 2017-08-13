@@ -1,5 +1,5 @@
 function kernel_1(
-  ij::Array{T,2}
+  ij::Matrix{T}
   ) where T<:Integer
 
   # Creating Graph

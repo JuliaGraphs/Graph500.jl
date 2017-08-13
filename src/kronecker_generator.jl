@@ -3,10 +3,11 @@
 """
 
 function get_min_type(n::Integer)
-  validtypes = [UInt8, UInt16, UInt32, UInt64]
-  for T in validtypes
-      n < typemax(T) && return T
-  end
+    if (n < 8)  return UInt8  end
+    if (n < 16) return UInt16 end
+    if (n < 32) return UInt32 end
+    if (n < 64) return UInt64 end
+    error("SCALE must be less than equal to 64");
 end
 
 """
@@ -31,13 +32,15 @@ function kronecker_generator(
     N  = 2^SCALE            # Set number of vertices
     M  = edgefactor * N     # Set number of edges
 
+    # getting correct Inttype
+    T = get_min_type(SCALE)
+
     # loop over each order of bit
     ab = A + B
     c_norm = C/(1 - (A + B))
     a_norm = A/(A + B)
 
-    # getting correct Inttype
-    T = get_min_type(N)
+
     ij = ones(T, 2, M)    # Create index arrays
     T_one = T(1)
     T_two = T(2)
