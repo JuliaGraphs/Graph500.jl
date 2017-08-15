@@ -3,11 +3,11 @@
 """
 
 function get_min_type(n::Integer)
-    if (n < 8)  return UInt8  end
-    if (n < 16) return UInt16 end
-    if (n < 32) return UInt32 end
-    if (n < 64) return UInt64 end
-    error("SCALE must be less than equal to 64");
+    (n >= 64 ) && error("SCALE must be less than equal to 64")
+    (n < 8)  && return UInt8
+    (n < 16) && return UInt16
+    (n < 32) && return UInt32
+    (n < 64) && return UInt64
 end
 
 """

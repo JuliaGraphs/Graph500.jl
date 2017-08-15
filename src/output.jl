@@ -1,10 +1,10 @@
-function output(result::Graph500Results)
+function output(result::Graph500Results,nv::Integer,ne::Integer)
 
       # Benchmark info
       println("\n")
       println("Scale : ", result.SCALE)
-      println("Number of vertices : ", ne(result.g))
-      println("Number of Edges : ", nv(result.g))
+      println("Number of vertices : ", nv)
+      println("Number of Edges : ", ne)
       println("Number of Bfs : ", result.NBFS);
 
       # kernel 1 Construction time

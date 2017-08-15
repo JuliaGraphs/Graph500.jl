@@ -4,10 +4,11 @@ module Graph500
   # Dependencies
   using LightGraphs
   using StatsBase
+  import LightGraphs.sample
 
   export
   # kronecker_generator
-  kronecker_generator,
+  kronecker_generator,get_min_type,
 
   # kernel_1
   kernel_1,

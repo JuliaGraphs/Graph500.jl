@@ -1,4 +1,7 @@
 @testset "driver" begin
   using LightGraphs
-  @test nv(driver(4,2).g) == 16
+  result = driver(4,2)
+  for g in keys(result)
+      @test nv(g) == 16
+  end
 end

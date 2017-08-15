@@ -1,11 +1,12 @@
-struct Graph500Results{T<:Integer}
-    g::Graph{T}
+struct Graph500Results
     SCALE::Integer
     NBFS::Integer
     kernel_1_time::Float64
-    kernel_2_time::SharedArray{Float64,1}
-    kernel_2_nedge::SharedArray{Int64,1}
+    kernel_2_time::Vector{Float64}
+    kernel_2_nedge::Vector{Float64}
 end
+
+Graph500Results() = Graph500Results{T}(0,0,0.0,zeros(0),zeros(0))
 
 function driver(
   SCALE::Integer,
@@ -25,29 +26,32 @@ function driver(
     T = eltype(g)
 
     search_key = key_sampling(g)
-    NBFS = length(search_key)
-
+    NBFS  = length(search_key)
     kernel_2_time =  zeros(Float64,NBFS)
     kernel_2_nedge = zeros(Float64,NBFS)
 
-    for k in 1:NBFS
+    for (k, key) in enumerate(search_key)
         tic()
         parent_ = zeros(T,nv(g))
-        kernel_2(g, search_key[k], parent_)
+        kernel_2(g, key, parent_)
         kernel_2_time[k] = toq()
-        err = validate(g, parent_, ij, search_key[k])
-        err <= 0 && error("BFS ",k ," from search key ",search_key[k]," failed to validate: ",err)
+        err = validate(g, parent_, ij, key)
+        err <= 0 && error("BFS ",k ," from search key ",key," failed to validate: ",err)
 
         # Volume/2
+        total_edges_traversed = 0
         for i in 1:length(parent_)
             if(parent_[i]>0)
-                kernel_2_nedge[k]+=indegree(g, parent_[i])
+                total_edges_traversed += indegree(g, parent_[i])
             end
         end
+        kernel_2_nedge[k] = Float64(total_edges_traversed)/2
     end
 
     # printing information
-    g = Graph500Results{T}(g, SCALE, NBFS, kernel_1_time, kernel_2_time, kernel_2_nedge)
-    output(g)
-    return g
+    stats = Graph500Results(SCALE, NBFS, kernel_1_time, kernel_2_time, kernel_2_nedge)
+    result = Dict{Graph{T},Graph500Results}()
+    result[g] = stats
+    output(stats, nv(g), ne(g))
+    return result
 end
