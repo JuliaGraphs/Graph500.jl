@@ -6,8 +6,7 @@ struct Graph500Results
     kernel_2_nedge::Vector{Float64}
 end
 
-Graph500Results() = Graph500Results{T}(0,0,0.0,zeros(0),zeros(0))
-
+Graph500Results() = Graph500Results(0,0,0.0,zeros(0),zeros(0))
 
 """
     Driver function for the Graph500 test
