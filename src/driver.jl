@@ -8,6 +8,10 @@ end
 
 Graph500Results() = Graph500Results{T}(0,0,0.0,zeros(0),zeros(0))
 
+
+"""
+    Driver function for the Graph500 test
+"""
 function driver(
   SCALE::Integer,
   edgefactor::Integer;
