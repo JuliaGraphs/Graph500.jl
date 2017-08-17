@@ -1,27 +1,41 @@
 function key_sampling(
-  g::SimpleWeightedGraph{T,R}
-  ) where T<:Integer where R<:Real
+  g::Graph{T}
+  ) where T<:Integer
 
   n_v = nv(g)
-  rand_keys = sample(1:n_v, 64, replace = false)
-  keys = Vector{T}()
+  keys = Set{T}()
   sizehint!(keys, 64)
+  NBFS = n_v > 64 ? 64 : n_v
+  length_keys = 0
+  i = 0  #Exit loop after a fixed number of iterations
 
-  for i in 1:64
-    if degree(g, rand_keys[i]) > 0
-      push!(keys, rand_keys[i])
-    end
+  while length_keys < NBFS && i < 1000
+      keys_required = (NBFS - length_keys)
+      rand_keys = sample(1:n_v,keys_required)
+      union!(keys, filter(x->degree(g,x)>0, rand_keys))
+      length_keys = length(keys)
+      i = i + 1;
   end
 
   return keys
 end
 
-function kernel_2(
-  g::SimpleWeightedGraph{T,R},
-  key::T
-  ) where T<:Integer where R<:Real
 
-  parent = dijkstra_shortest_paths(g, key, LightGraphs.DefaultDistance(nv(g))).parents
-  parent[key] = key
-  parent = parent - 1
+function kernel_2(g::Graph{T}, s::T, parents::Vector{T}) where T<:Integer
+    Q=Vector{T}()
+    seen = falses(nv(g))
+    parents[s] = s
+    seen[s] = true
+    push!(Q, s)
+    while !isempty(Q)
+        src = shift!(Q)
+        for vertex in out_neighbors(g, src)
+            if !seen[vertex]
+                push!(Q, vertex) #Push onto queue
+                parents[vertex] = src
+                seen[vertex] = true
+            end
+        end
+    end
+    return parents
 end

@@ -1,10 +1,17 @@
-struct kroneckerState{T<:Integer, R<:Real}
-    edge::Array{T,2}
-    weight::Array{R}
+"""
+    Return the minimum Integer type which can contain `n`
+"""
+
+function get_min_type(n::Integer)
+    (n >= 64 ) && error("SCALE must be less than equal to 64")
+    (n < 8)  && return UInt8
+    (n < 16) && return UInt16
+    (n < 32) && return UInt32
+    (n < 64) && return UInt64
 end
 
 """
-    Returns a kroneckerState. `SCALE` is the logarithm base two of the number of vertices.
+    Returns a edge_list. `SCALE` is the logarithm base two of the number of vertices.
     `edgefactor` is the ratio of the graph’s edge count to its vertex count (i.e., half the
     average degree of a vertex in the graph).
 
@@ -24,44 +31,40 @@ function kronecker_generator(
   )
     N  = 2^SCALE            # Set number of vertices
     M  = edgefactor * N     # Set number of edges
-    ij = ones(Int, 2, M)      # Create index arrays
 
-    # Loop over each order of bit
+    # getting correct Inttype
+    T = get_min_type(SCALE)
+
+    # loop over each order of bit
     ab = A + B
     c_norm = C/(1 - (A + B))
     a_norm = A/(A + B)
 
-    #Seeding the processors if replicate is true
+
+    ij = ones(T, 2, M)    # Create index arrays
+    T_one = T(1)
+    T_two = T(2)
+
+    #seeding the processors if replicate is true
     if replicate
       for i in 1:nprocs()
          @spawnat i srand(seed[i])
       end
     end
 
-    temp =  @parallel (+) for ib in 1:SCALE
+    temp =  @parallel (+) for ib in 1:T(SCALE)
         # Compare with probabilities and set bits of indices.
         random_bits = falses(2, M)
         random_bits[1, :] = rand(M) .> (ab)
         random_bits[2, :] = rand(M) .> ( c_norm.*(random_bits[1, :]) + a_norm.*.!(random_bits[1, :]) )
-        2^(ib-1).*random_bits
+        T_two^(ib-T_one).*random_bits
     end
 
     ij += temp
-
-    # Generate weights
-    if replicate
-      srand(seed[nprocs() + 1])
-    end
-    ijw = rand(Float64, M)
 
     # Permute vertex labels
     p = randperm(N)
     ij[1:2, :] = p[ij[1:2, :]]
 
-    # Permute the edge list
-    p = randperm(M)
-    ij = ij[:, p]
-    ijw = ijw[p]
-
-    return kroneckerState{Int64, Float64}(ij, ijw)
+    return ij
 end

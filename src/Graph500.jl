@@ -3,12 +3,12 @@ module Graph500
 
   # Dependencies
   using LightGraphs
-  using SimpleWeightedGraphs
   using StatsBase
+  import LightGraphs.sample
 
   export
   # kronecker_generator
-  kronecker_generator,
+  kronecker_generator,get_min_type,
 
   # kernel_1
   kernel_1,
@@ -16,13 +16,21 @@ module Graph500
   # kernel_2
   key_sampling, kernel_2,
 
-  #kernel_3
-  kernel_3
+  # bfs validation
+  validate,
+
+  # driver function
+  driver,
+
+  # statistics output
+  output
 
   Graph500
   include("kronecker_generator.jl")
   include("kernel_1.jl")
   include("kernel_2.jl")
-  include("kernel_3.jl")
+  include("validation.jl")
+  include("driver.jl")
+  include("output.jl")
 
 end # module
