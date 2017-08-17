@@ -21,21 +21,4 @@ function key_sampling(
 end
 
 
-function kernel_2(g::Graph{T}, s::T, parents::Vector{T}) where T<:Integer
-    Q=Vector{T}()
-    seen = falses(nv(g))
-    parents[s] = s
-    seen[s] = true
-    push!(Q, s)
-    while !isempty(Q)
-        src = shift!(Q)
-        for vertex in out_neighbors(g, src)
-            if !seen[vertex]
-                push!(Q, vertex) #Push onto queue
-                parents[vertex] = src
-                seen[vertex] = true
-            end
-        end
-    end
-    return parents
-end
+kernel_2(g::Graph{T}, s::T) where T<:Integer = bfs_parents(g,s)
