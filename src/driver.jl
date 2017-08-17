@@ -35,8 +35,7 @@ function driver(
 
     for (k, key) in enumerate(search_key)
         tic()
-        parent_ = zeros(T,nv(g))
-        kernel_2(g, key, parent_)
+        parent_ = kernel_2(g, key)
         kernel_2_time[k] = toq()
         err = validate(g, parent_, ij, key)
         err <= 0 && error("BFS ",k ," from search key ",key," failed to validate: ",err)

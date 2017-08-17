@@ -9,7 +9,6 @@
   keys_ = @inferred key_sampling(g)
   @test length(keys_) <= 64
   T = eltype(g)
-  parent_ = zeros(T,nv(g))
-  @inferred kernel_2(g,0x01,parent_)
+  parent_  = @inferred  kernel_2(g,0x01)
   @test length(parent_) <= 2^2
 end
