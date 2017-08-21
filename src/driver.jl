@@ -17,9 +17,11 @@ function driver(
   replicate::Bool=false,
   seed::AbstractArray=[])
 
+    println("Generating graph.")
     # generate edge list
     ij = kronecker_generator(SCALE, edgefactor;replicate=replicate,seed=seed)
 
+    println("Starting Kernel 1.")
     # timing kernel 1
     tic()
     g = kernel_1(ij)
@@ -33,7 +35,7 @@ function driver(
     kernel_2_time =  zeros(Float64,NBFS)
     kernel_2_nedge = zeros(Float64,NBFS)
 
-    for (k, key) in enumerate(search_key)
+    @showprogress 1 "Kernel 2: " for (k, key) in enumerate(search_key)
         tic()
         parent_ = kernel_2(g, key)
         kernel_2_time[k] = toq()
