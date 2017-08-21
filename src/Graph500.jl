@@ -4,6 +4,7 @@ module Graph500
   # Dependencies
   using LightGraphs
   using StatsBase
+  using ProgressMeter
   import LightGraphs.sample
 
   export
