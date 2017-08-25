@@ -1,4 +1,4 @@
 julia 0.6
-LightGraphs v0.10.0
-StatsBase v0.17.0
+LightGraphs 0.10.0
+StatsBase 0.17.0
 ProgressMeter
