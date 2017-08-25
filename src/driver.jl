@@ -1,3 +1,4 @@
+
 struct Graph500Results
     scale::Integer
     nbfs::Integer
@@ -6,7 +7,7 @@ struct Graph500Results
     kernel_2_nedge::Vector{Float64}
 end
 
-# required for initialising Dict{Graph{T},Graph500Results}() constructor
+### required for initialising Dict{Graph{T},Graph500Results}() constructor
 Graph500Results() = Graph500Results(0, 0, 0.0, zeros(0), zeros(0))
 
 @doc_str """
@@ -38,7 +39,7 @@ function driver(
     kernel_2_time =  zeros(Float64, nbfs)   # stores per bfs time
     kernel_2_nedge = zeros(Float64, nbfs)   # stores number of edges traversed per bfs
 
-    # kernel_2
+    ### kernel_2
     @showprogress 1 "Kernel 2: " for (k, key) in enumerate(search_key)
         tic()
         parent_ = kernel_2(g, key)
@@ -46,7 +47,7 @@ function driver(
         err = validate(g, parent_, ij, key)
         err <= 0 && error("BFS ", k, " from search key ", key, " failed to validate: ", err)
 
-        # Volume/2
+        ### Volume/2
         total_edges_traversed = 0
         for i in 1:length(parent_)
             if(parent_[i] > 0)
@@ -56,7 +57,7 @@ function driver(
         kernel_2_nedge[k] = Float64(total_edges_traversed)/2
     end
 
-    # Result statistics
+    ### Result statistics
     result_state = Graph500Results(scale, nbfs, kernel_1_time, kernel_2_time, kernel_2_nedge)
     result = Dict{Graph{T}, Graph500Results}()
     result[g] = result_state
