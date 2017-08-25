@@ -6,5 +6,5 @@
   end
 
   import Graph500.Graph500Results
-  @test Graph500Results().SCALE == 0
+  @test Graph500Results().scale == 0
 end

@@ -1,3 +1,9 @@
+@doc_str """
+    validate(g, parent_, ij, search_key)
+validate `parent_` info for bfs on graph `g` with key `search_key` based on Graph500 result
+validation(http://graph500.org/?page_id=12#sec-8)
+Return `1` for no error
+"""
 function validate(
   g::Graph{T},
   parent_::Vector{T},
@@ -5,11 +11,10 @@ function validate(
   search_key::T
   ) where T<:Integer
 
-    # Default: no error.
-    out = 1
+    out = 1 # Default: no error.
 
-    # root must be the parent of itself
     if parent_[search_key] != search_key
+      # root must be the parent of itself
       out = 0
       return out
     end
@@ -38,8 +43,8 @@ function validate(
     #Check that there are no edges with only one end in the tree.
     #This also checks the component condition.
     lij = level_[ij]
-    neither_in = zeros(Bool,size(lij)[2])
-    not_neither_in_or_both_in = zeros(Bool,size(lij)[2])
+    neither_in = zeros(Bool, size(lij)[2])
+    not_neither_in_or_both_in = zeros(Bool, size(lij)[2])
     for i in 1:size(lij)[2]
       if ij[1,i] != ij[2,i]
         neither_in[i] = (lij[1,i] == 0 && lij[2,i] == 0)

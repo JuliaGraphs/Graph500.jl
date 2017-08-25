@@ -23,7 +23,7 @@ module Graph500
   # driver function
   driver,
 
-  # statistics output
+  # print statistics
   output
 
   Graph500
