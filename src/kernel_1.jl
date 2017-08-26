@@ -38,7 +38,7 @@ function kernel_1_new(
   g = Graph{T}(nv) # Creating a graph with `nv` number of vertices
   T_upper, sftamt = get_next_type(T)
   v = Vector{T_upper}()
-  vertex_degree = zeros(T, nv)  ## to be changed
+  vertex_degree = zeros(T_upper, nv)  # Edgefactor could not exceed 2^(SCALE)...Increase SCALE
   sizehint!(v, size(ij)[2]*2)
   ne = 0
 
@@ -46,8 +46,8 @@ function kernel_1_new(
     if(ij[1,i] != ij[2,i])
         push!(v,  (T_upper(ij[1,i]) << sftamt) + ij[2,i])
         push!(v,  (T_upper(ij[2,i]) << sftamt) + ij[1,i])
-        vertex_degree[ij[1,i]]+=1
-        vertex_degree[ij[2,i]]+=1
+        vertex_degree[T_upper(ij[1,i])]+=1
+        vertex_degree[T_upper(ij[2,i])]+=1
     end
   end
 
