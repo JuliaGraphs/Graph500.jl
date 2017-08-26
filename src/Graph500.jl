@@ -5,10 +5,7 @@ module Graph500
   using LightGraphs
   using StatsBase
   using ProgressMeter
-  using DataStructures
-  using SortingAlgorithms
   import LightGraphs.sample
-  import LightGraphs._insert_and_dedup!
 
   export
   # kronecker_generator

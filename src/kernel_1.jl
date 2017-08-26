@@ -21,46 +21,51 @@ function kernel_1(
   return g
 end
 
+function get_next_type(T::DataType)
+    (T== UInt8) && return  (UInt16,8)
+    (T== UInt16) && return (UInt32,16)
+    (T== UInt32) && return (UInt64,32)
+    (T== UInt64) && return (UInt128,64)
+    error("Overflow")
+end
+
 function kernel_1_new(
   ij::Matrix{T}
   ) where T<:Integer
 
   # Creating Graph
   nv = maximum(ij) # Number of vertices
-  g = Graph{T}() # Creating a graph with `nv` number of vertices
-  v = Vector{Tuple{T,T}}()
-  vertex_degree = zeros(T, nv)
+  g = Graph{T}(nv) # Creating a graph with `nv` number of vertices
+  T_upper, sftamt = get_next_type(T)
+  v = Vector{T_upper}()
+  vertex_degree = zeros(T, nv)  ## to be changed
   sizehint!(v, size(ij)[2]*2)
   ne = 0
 
-  # removing self Loop and adding edges
   for i in 1:size(ij)[2]
     if(ij[1,i] != ij[2,i])
-        push!(v, tuple(ij[1,i],ij[2,i]))
-        push!(v, tuple(ij[2,i],ij[1,i]))
+        push!(v,  (T_upper(ij[1,i]) << sftamt) + ij[2,i])
+        push!(v,  (T_upper(ij[2,i]) << sftamt) + ij[1,i])
         vertex_degree[ij[1,i]]+=1
         vertex_degree[ij[2,i]]+=1
     end
   end
 
-  sort!(v,alg=QuickSort)
-  fadjlist = Vector{Vector{T}}()
-  sizehint!(fadjlist, nv)
-  for i in one(T):nv
-      push!(fadjlist, Vector{T}())
-      sizehint!(fadjlist[i], vertex_degree[i])
-  end
+ sort!(v)
 
-  last_added = Tuple{T,T}([0, 0])
-  for edge in v
-      if(edge != last_added)
-          push!(fadjlist[edge[1]], edge[2])
-          last_added = edge
-          ne += 1
-      end
-  end
+ for i in one(T):nv
+      sizehint!(g.fadjlist[i], vertex_degree[i])
+ end
 
-  g.fadjlist = fadjlist
-  g.ne = ne/2
+ last_added = zero(Int128)
+ for edge in v
+     if(edge != last_added)
+         push!(g.fadjlist[T(edge >> sftamt)], T(edge & typemax(T)))
+         last_added = edge
+         g.ne += 1
+     end
+ end
+
+  g.ne /= 2
   return g
 end
