@@ -12,7 +12,7 @@ module Graph500
   kronecker_generator,get_min_type,
 
   # kernel_1
-  kernel_1, kernel_1_new,
+  kernel_1 
 
   # kernel_2
   key_sampling, kernel_2,
