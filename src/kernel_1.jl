@@ -24,10 +24,11 @@ function kernel_1(
   T_upper, sftamt = get_next_type(T)
   v = Vector{T_upper}()
   vertex_degree = zeros(T_upper, nv)  # Edgefactor could not exceed 2^(SCALE)...Increase SCALE
-  sizehint!(v, size(ij)[2]*2)
+  sizehint!(v, size(ij,2)*2)
   ne = 0
 
-  for i in 1:size(ij)[2]
+  # Construct an integer with src as MSB and dst as LSB
+  for i in 1:size(ij,2)
     if(ij[1,i] != ij[2,i])
         push!(v,  (T_upper(ij[1,i]) << sftamt) + ij[2,i])
         push!(v,  (T_upper(ij[2,i]) << sftamt) + ij[1,i])
@@ -42,6 +43,7 @@ function kernel_1(
       sizehint!(g.fadjlist[i], vertex_degree[i])
  end
 
+ # Create adjacency list and check for duplicate vertices
  last_added = zero(Int128)
  for edge in v
      if(edge != last_added)
