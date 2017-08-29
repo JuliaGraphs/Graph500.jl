@@ -33,4 +33,4 @@ after_success:
   # push coverage results to Coveralls
   # - julia -e 'cd(Pkg.dir("Graph500")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
   # push coverage results to Codecov
-  - REPO_TOKEN=a186634d-03c3-4677-ae15-0c120576e610 julia -e 'cd(Pkg.dir("Graph500")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
+  - julia -e 'cd(Pkg.dir("Graph500")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
