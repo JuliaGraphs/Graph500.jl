@@ -1,4 +1,4 @@
-@doc_str """
+doc"""
     key_sampling(g)
 Sample `min(nv(g), 64)` keys in `[1,nv(g)]`
 Returns a vector of randomly sampled keys
@@ -25,7 +25,7 @@ function key_sampling(
   return keys
 end
 
-@doc_str """
+doc"""
     kernel_2(g, s)
 Perform bfs on graph `g` starting at vertex `s`
 Returns vector containing parent info for each vertex

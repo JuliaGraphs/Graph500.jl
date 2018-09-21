@@ -1,4 +1,3 @@
-__precompile__(true)
 module Graph500
 
   # Dependencies
@@ -6,6 +5,11 @@ module Graph500
   using StatsBase
   using ProgressMeter
   import LightGraphs.sample
+  using Distributed: @everywhere, @spawnat, @distributed, nprocs, myid
+  using Markdown: @doc_str
+  using Random
+  using Statistics: std
+
 
   export
   # kronecker_generator

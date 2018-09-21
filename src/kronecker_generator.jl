@@ -50,17 +50,26 @@ function kronecker_generator(
     T_two = T(2)
 
     # seeding the processors if replicate is true
-    if replicate
-      for i in 1:nprocs()
-         @spawnat i srand(seed[i])
-      end
-    end
+    # if replicate
+    #     for i in 1:nprocs()
+    #         if replicate
+    #             @spawnat i rng =  MersenneTwister(seed[i])
+    #         else
+    #             @spawnat i rng = MersenneTwister()
+    #         end
+    #     end
+    # end
 
-    temp =  @parallel (+) for ib in 1:T(scale)
+    temp =  @distributed (+) for ib in 1:T(scale)
         # Compare with probabilities and set bits of indices.
+        if replicate
+            rng = Random.seed!(seed[myid()])
+        else
+            rng = Random.seed!()
+        end
         random_bits = falses(2, M)
-        random_bits[1, :] = rand(M) .> (ab)
-        random_bits[2, :] = rand(M) .> ( c_norm.*(random_bits[1, :]) + a_norm.*.!(random_bits[1, :]) )
+        random_bits[1, :] = rand(rng, M) .> (ab)
+        random_bits[2, :] = rand(rng, M) .> ( c_norm.*(random_bits[1, :]) + a_norm.*.!(random_bits[1, :]) )
         T_two^(ib-T_one).*random_bits
     end
 

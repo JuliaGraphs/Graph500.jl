@@ -1,4 +1,4 @@
-@doc_str """
+doc"""
     validate(g, parent_, ij, search_key)
 validate `parent_` info for bfs on graph `g` with key `search_key` based on Graph500 result
 validation(http://graph500.org/?page_id=12#sec-8)
@@ -20,16 +20,16 @@ function validate(
     end
 
     N = nv(g)
-    slice = find(x->(x > zero(T)), parent_)
+    slice = findall(x->(x > zero(T)), parent_)
 
     #Compute levels and check for cycles.
     level_ = zeros(T, length(parent_))
-    level_[slice] = 1
+    level_[slice] .= 1
     P = parent_[slice]
     mask = (P .!= search_key)
     k = 0
     while any(mask)
-      level_[slice[mask]] = level_[slice[mask]] + 1
+      level_[slice[mask]] .+= 1
       P = parent_[P]
       mask = (P .!= search_key)
       k = k + 1

@@ -1,4 +1,4 @@
-@doc_str """
+"""
     get_next_type(T)
 Return a data with a Integer Datatype twice the size of `T`
 """
@@ -9,7 +9,7 @@ function get_next_type(T::DataType)
     (T== UInt64) && return (UInt128,64)
 end
 
-@doc_str """
+"""
     kernel_1(ij)
 Create Graph from edge list `ij` based on kernel_1 benchmark(http://graph500.org/?page_id=12#sec-4)
 Return `LightGraphs.SimpleGraph` structure
