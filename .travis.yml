@@ -5,8 +5,8 @@ os:
   - linux
   
 julia:
-  - 0.6
-
+  - 1.0
+  - nightly
 notifications:
   email: false
 
@@ -27,10 +27,10 @@ matrix:
 
 # uncomment the following lines to override the default test script
 script:
- - julia -e 'Pkg.clone(pwd()); Pkg.build("Graph500"); Pkg.test("Graph500"; coverage=true)'
+ - julia -e 'using Pkg; Pkg.clone(pwd()); Pkg.build("Graph500"); Pkg.test("Graph500"; coverage=true)'
 
 after_success:
   # push coverage results to Coveralls
   # - julia -e 'cd(Pkg.dir("Graph500")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
   # push coverage results to Codecov
-  - julia -e 'cd(Pkg.dir("Graph500")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
+  - julia -e 'using Pkg; cd(Pkg.dir("Graph500")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'

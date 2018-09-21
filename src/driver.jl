@@ -10,7 +10,7 @@ end
 ### required for initialising Dict{Graph{T},Graph500Results}() constructor
 Graph500Results() = Graph500Results(0, 0, 0.0, zeros(0), zeros(0))
 
-@doc_str """
+doc"""
     driver(scale, edgefactor; replicate, seed)
 
 Run Graph500 benchmark(http://graph500.org/?page_id=12) on a graph with `2^scale` vertices and
@@ -29,9 +29,8 @@ function driver(
     ij = kronecker_generator(scale, edgefactor; replicate=replicate, seed=seed)   # generate edge list
 
     println("Starting Kernel 1.")
-    tic()
-    g = kernel_1(ij)    # kernel1
-    kernel_1_time = toq()
+    
+    g, kernel_1_time = @timed kernel_1(ij)    # kernel1
 
     T = eltype(g)
     search_key = key_sampling(g)    # sample min(nv(g),64) vertices for dfs
@@ -41,9 +40,7 @@ function driver(
 
     ### kernel_2
     @showprogress 1 "Kernel 2: " for (k, key) in enumerate(search_key)
-        tic()
-        parent_ = kernel_2(g, key)
-        kernel_2_time[k] = toq()
+        parent_, kernel_2_time[k] = @timed kernel_2(g, key)
         err = validate(g, parent_, ij, key)
         err <= 0 && error("BFS ", k, " from search key ", key, " failed to validate: ", err)
 

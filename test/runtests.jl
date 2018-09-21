@@ -1,5 +1,5 @@
 using Graph500
-using Base.Test
+using Test
 
 @testset begin
   include("kronecker_generator.jl")
